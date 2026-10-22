@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Simple tools for clearer operating decisions across margin, inventory and planning, built by Tim Fruge.">
+  <title>Operations Decision Toolkit | Tim Fruge</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="https://timfruge.com" target="_blank" rel="noopener">Tim Fruge</a>
+      <span class="header-note">Operations Decision Toolkit</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero shell">
+      <p class="eyebrow">A practical work in progress</p>
+      <h1>Small tools for decisions that usually start with a spreadsheet.</h1>
+      <p class="intro">I built this to explore how simple technology can make everyday operating questions easier to see and discuss. The answers are estimates—not substitutes for the judgment behind them.</p>
+    </section>
+
+    <section class="tool-nav shell" aria-label="Choose a calculator">
+      <button class="tool-tab active" type="button" data-tool="margin" aria-selected="true">Contribution margin</button>
+      <button class="tool-tab" type="button" data-tool="runway" aria-selected="false">Inventory runway</button>
+      <button class="tool-tab" type="button" data-tool="reorder" aria-selected="false">Reorder timing</button>
+    </section>
+
+    <section class="tools shell">
+      <article class="tool-panel active" id="margin" aria-labelledby="margin-title">
+        <div class="panel-copy">
+          <p class="step">Tool 01</p>
+          <h2 id="margin-title">Contribution margin</h2>
+          <p>See what remains from an order after the variable costs required to sell and fulfill it.</p>
+          <p class="definition">Different companies define contribution margin differently. This version shows every included cost so the assumptions stay visible.</p>
+        </div>
+        <form class="calculator" id="margin-form">
+          <div class="field-grid">
+            <label>Order revenue <span>$</span><input id="revenue" type="number" min="0" step="0.01" value="75"></label>
+            <label>Product cost <span>$</span><input id="product-cost" type="number" min="0" step="0.01" value="18"></label>
+            <label>Fulfillment cost <span>$</span><input id="fulfillment-cost" type="number" min="0" step="0.01" value="4.50"></label>
+            <label>Shipping subsidy <span>$</span><input id="shipping-cost" type="number" min="0" step="0.01" value="7"></label>
+            <label>Payment fee <span>%</span><input id="payment-percent" type="number" min="0" step="0.01" value="2.9"></label>
+            <label>Payment fee, fixed <span>$</span><input id="payment-fixed" type="number" min="0" step="0.01" value="0.30"></label>
+            <label>Advertising cost per order <span>$</span><input id="ad-cost" type="number" min="0" step="0.01" value="20"></label>
+            <label>Return/refund allowance <span>%</span><input id="refund-percent" type="number" min="0" max="100" step="0.1" value="3"></label>
+          </div>
+          <div class="results" aria-live="polite">
+            <div><span>Contribution per order</span><strong id="margin-dollars">$0.00</strong></div>
+            <div><span>Contribution margin</span><strong id="margin-percent">0.0%</strong></div>
+            <div><span>Break-even ad cost</span><strong id="break-even-cac">$0.00</strong></div>
+          </div>
+          <p class="result-note" id="margin-note"></p>
+        </form>
+      </article>
+
+      <article class="tool-panel" id="runway" aria-labelledby="runway-title" hidden>
+        <div class="panel-copy">
+          <p class="step">Tool 02</p>
+          <h2 id="runway-title">Inventory runway</h2>
+          <p>Estimate how long available inventory will last at the current rate of demand.</p>
+          <p class="definition">Runway can change quickly. Promotions, seasonality, subscriptions and delayed receipts all deserve a second look before acting.</p>
+        </div>
+        <form class="calculator" id="runway-form">
+          <div class="field-grid">
+            <label>Units on hand <input id="on-hand" type="number" min="0" step="1" value="5000"></label>
+            <label>Reserved or unavailable units <input id="reserved" type="number" min="0" step="1" value="500"></label>
+            <label>Average daily demand <input id="daily-demand" type="number" min="0" step="0.1" value="125"></label>
+            <label>Demand change scenario <span>%</span><input id="demand-change" type="number" step="1" value="0"></label>
+          </div>
+          <div class="results two-results" aria-live="polite">
+            <div><span>Available units</span><strong id="available-units">0</strong></div>
+            <div><span>Estimated runway</span><strong id="runway-days">0 days</strong></div>
+            <div><span>Estimated stockout</span><strong id="stockout-date">—</strong></div>
+            <div><span>Adjusted daily demand</span><strong id="adjusted-demand">0</strong></div>
+          </div>
+          <p class="result-note" id="runway-note"></p>
+        </form>
+      </article>
+
+      <article class="tool-panel" id="reorder" aria-labelledby="reorder-title" hidden>
+        <div class="panel-copy">
+          <p class="step">Tool 03</p>
+          <h2 id="reorder-title">Reorder timing</h2>
+          <p>Compare the inventory position with a simple reorder point based on demand, lead time and safety stock.</p>
+          <p class="definition">This is a planning signal, not a purchase order. Capacity, MOQs, cash, shelf life and supplier reliability still matter.</p>
+        </div>
+        <form class="calculator" id="reorder-form">
+          <div class="field-grid">
+            <label>Units on hand <input id="reorder-on-hand" type="number" min="0" step="1" value="5000"></label>
+            <label>Units already on order <input id="on-order" type="number" min="0" step="1" value="0"></label>
+            <label>Committed/reserved units <input id="committed" type="number" min="0" step="1" value="500"></label>
+            <label>Average daily demand <input id="reorder-demand" type="number" min="0" step="0.1" value="125"></label>
+            <label>Supplier lead time <span>days</span><input id="lead-time" type="number" min="0" step="1" value="30"></label>
+            <label>Safety-stock coverage <span>days</span><input id="safety-days" type="number" min="0" step="1" value="14"></label>
+            <label>Target coverage after receipt <span>days</span><input id="target-days" type="number" min="0" step="1" value="90"></label>
+          </div>
+          <div class="results two-results" aria-live="polite">
+            <div><span>Inventory position</span><strong id="inventory-position">0</strong></div>
+            <div><span>Reorder point</span><strong id="reorder-point">0</strong></div>
+            <div><span>Suggested order</span><strong id="suggested-order">0</strong></div>
+            <div><span>Status</span><strong id="reorder-status">—</strong></div>
+          </div>
+          <p class="result-note" id="reorder-note"></p>
+        </form>
+      </article>
+    </section>
+
+    <section class="about shell">
+      <p class="eyebrow">Why this exists</p>
+      <h2>I understand the operating questions. I’m learning more about the technology that can help answer them.</h2>
+      <p>My career has put products, economics, inventory, systems and handoffs on the same desk. This project is part of learning how to turn that experience into simple, useful tools—without pretending the tool makes the decision for you.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <span>Built by Tim Fruge in Austin, Texas.</span>
+      <nav aria-label="External links">
+        <a href="https://timfruge.com" target="_blank" rel="noopener">Website</a>
+        <a href="https://www.linkedin.com/in/tim-fruge/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/timfruge" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
